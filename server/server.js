@@ -3,15 +3,16 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+require('dotenv').config()
 
 const app = express();
 app.use(cors());
 app.use(bodyparser.json());
 
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
 });
 
 db.connect((err) => {
@@ -25,13 +26,14 @@ db.connect((err) => {
 
 //CREATING TABLES:
 function createTables(){
-    const query1 = "create database if not exists covid";
+    const database = process.env.DB_DATABASE;
+    const query1 = "use "+database;
     db.query(query1,(err,result)=>{
         if(err){
-            console.log("Couldn't Create Database");
+            console.log(err);
             return;
         }else{
-            db.query("use COVID",(err1,results1)=>{
+            db.query("use "+database,(err1,results1)=>{
                 if(err1){
                     console.log(`Cannot use the Database:-${err}`);
                     return;
@@ -44,6 +46,7 @@ function createTables(){
                         slot_timings varchar(255),
                         city varchar(100) not null,
                         centre_name varchar(255),
+                        booked_date varchar(255),
                         booked_city varchar(255)
                     
                     )`;
@@ -290,7 +293,7 @@ app.get('/' , (req,res) => {
 })
 
 
-app.post('/book/:id/:centre/:city/:timings', (req, res) => {
+app.post('/book/:id/:centre/:city/:timings/:date', (req, res) => {
      
 
     if (is_user) {
@@ -298,10 +301,11 @@ app.post('/book/:id/:centre/:city/:timings', (req, res) => {
         const timings = req.params.timings;
         const id = req.params.id;
         const city = req.params.city;
+        const date = req.params.date;
         const main_query = 'select centre_name from users where id = ?';
 
         const query = "UPDATE centres SET slots = slots - 1 WHERE centre_name = ? and city = ?";
-        const query2 = "UPDATE users SET slot_timings = ?, centre_name = ? , booked_city = ? WHERE id = ?";
+        const query2 = "UPDATE users SET slot_timings = ?, centre_name = ? , booked_city = ? , booked_date = ? WHERE id = ?";
         db.query(main_query,[id],(err,results)=>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -316,7 +320,7 @@ app.post('/book/:id/:centre/:city/:timings', (req, res) => {
                             console.error("Error updating slots in centres table:", err);
                             return res.status(500).send(`Internal Server Error: ${err}`);
                         } else {
-                            db.query(query2, [timings, centre, city,id], (err, result) => {
+                            db.query(query2, [timings, centre, city,date,id], (err, result) => {
                                 if (err) {
                                     console.error("Error updating user's slot_timings and centre_name:", err);
                                     return res.status(500).send(`Internal Server Error: ${err}`);
@@ -353,7 +357,7 @@ app.get('/search/:city' , (req,res) => {
 app.get('/profile/:id' , (req,res) =>{
     if(is_user == true){
         const id = req.params.id;
-        const query = "select name,email,city,slot_timings,centre_name,booked_city from users where id = ?";
+        const query = "select name,email,city,slot_timings,centre_name,booked_city,booked_date from users where id = ?";
         db.query(query,[id],(err,results)=>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);

@@ -55,6 +55,11 @@ function ProfilePage() {
                   <strong>Centre City:</strong> {user.booked_city}
                 </Typography>
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="subtitle1">
+                  <strong>Booked Date:</strong> {user.booked_date}
+                </Typography>
+              </Grid>
             </Grid>
           )}
         </Paper>

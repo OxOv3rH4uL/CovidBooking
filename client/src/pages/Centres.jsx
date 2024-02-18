@@ -10,6 +10,7 @@ function Centres() {
     const [selectedCentre, setSelectedCentre] = useState(null);
     const [open, setOpen] = useState(false);
     const [slotTimings, setSlotTimings] = useState('');
+    const [date, setDate] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
@@ -33,7 +34,7 @@ function Centres() {
 
     const handleBook = () => {
         const id = localStorage.getItem('id');
-        axios.post(`http://localhost:3001/book/${id}/${selectedCentre.centre_name}/${selectedCentre.city}/${slotTimings}`)
+        axios.post(`http://localhost:3001/book/${id}/${selectedCentre.centre_name}/${selectedCentre.city}/${slotTimings}/${date}`)
             .then(res => {
                 if (res.status === 200 && res.data === "Booked Successfully!") {
                     alert("Booked Successfully!");
@@ -146,6 +147,12 @@ function Centres() {
                             variant="outlined"
                             value={slotTimings}
                             onChange={(e) => setSlotTimings(e.target.value)}
+                        />
+                        <TextField
+                            type="date"
+                            variant="outlined"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
                         />
                         <div className="modal-button-container">
                             <Button onClick={handleBook} variant="contained" color="primary">

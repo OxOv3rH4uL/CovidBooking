@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS USERS(
     password varchar(255) not null, 
     slot_timings varchar(255),
     city varchar(100) not null,
+    booked_date varchar(255),
     centre_name varchar(255),
     booked_city varchar(255)
 
