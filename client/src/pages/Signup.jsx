@@ -19,7 +19,8 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const url = "https://vaxbooker.onrender.com";
+        const url = "http://localhost:3001";
+        console.log(url+'/signup');
         axios.post(url+"/signup", formData)
             .then(res => {
                 if (res.data === "Registered Successfully!") {
@@ -32,7 +33,8 @@ function Signup() {
                 if (err.response && err.response.status === 401) {
                     alert("Email is already in use!");
                 } else {
-                    alert("Internal Server Error!");
+                    console.log(err);
+                    alert(`Internal Server Error: ${err.response}`);
                 }
             });
     };

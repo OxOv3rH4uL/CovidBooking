@@ -107,7 +107,7 @@ app.post('/create_centre' , (req,res) => {
         const c_city = details.centre_city;
         const slots = details.slots;
         
-        quer = "SELECT centre_name FROM centres WHERE city = ?";
+        quer = "SELECT centre_name FROM CENTRES WHERE city = ?";
         db.query(quer, [c_city], (err, results) => {
             if(err) {
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -117,7 +117,7 @@ app.post('/create_centre' , (req,res) => {
                     res.status(200).send(`The City already has a COVID centre`);
                 } else {
                     
-                    query = "INSERT INTO centres(centre_name, city, slots) VALUES (?, ?, ?)";
+                    query = "INSERT INTO CENTRES(centre_name, city, slots) VALUES (?, ?, ?)";
                     db.query(query, [c_name, c_city, slots], (err, results) => {
                         if(err) {
                             res.status(500).send(`Internal Server Error: ${err}`);
@@ -141,7 +141,7 @@ app.put('/update_centre/:id' , (req,res) =>{
         const c_name = details.centre_name;
         const c_city = details.city;
         const slots = details.slots;
-        query = "update centres set centre_name = ? , city = ? , slots = ? where id = ?";
+        query = "update CENTRES set centre_name = ? , city = ? , slots = ? where id = ?";
         db.query(query,[c_name,c_city,slots,id] , (err,results) =>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -157,7 +157,7 @@ app.delete('/delete_centre/:id' , (req,res) => {
         res.status(400).send("NOT ADMIN!");
     }else{
         const id = req.params.id;
-        query = "delete from centres where id = ?";
+        query = "delete from CENTRES where id = ?";
         db.query(query,[id],(err,result)=>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -172,7 +172,7 @@ app.delete('/delete_centre/:id' , (req,res) => {
 app.get('/centre/:id',(req,res)=>{
     if(is_admin == true){
         const id = req.params.id;
-        query = "select centre_name , city , slots from centres where id = ?";
+        query = "select centre_name , city , slots from CENTRES where id = ?";
         db.query(query,[id],(err,results)=>{
             if(err){
                 res.status(500).send(`Internal Server Error : ${err}`);
@@ -187,7 +187,7 @@ app.get('/centre/:id',(req,res)=>{
 
 app.get('/admin',(req,res) => {
     if(is_admin == true){
-        query = "select * from centres"
+        query = "select * from CENTRES"
         db.query(query,(err,results) =>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -213,7 +213,7 @@ app.post('/signup', (req, res) => {
         if (err) {
             res.status(500).send(`Internal Server Error : ${err}`);
         } else {
-            const q = "select name from users where email = ?";
+            const q = "select name from USERS where email = ?";
             db.query(q,[email],(e,r)=>{
                 if(e){
                     res.status(500).send(`Internal Server Error :${err}`);
@@ -222,7 +222,7 @@ app.post('/signup', (req, res) => {
                         res.status(401).send("Email is already in use!");
                     }else{
 
-                        const query = "INSERT INTO users(name, email, password, city) VALUES (?, ?, ?, ?)";
+                        const query = "INSERT INTO USERS(name, email, password, city) VALUES (?, ?, ?, ?)";
                         db.query(query, [name, email, hashedPassword, city], (err, results) => {
                             if (err) {
                                 res.status(500).send(`Internal Server Error : ${err}`);
@@ -247,7 +247,7 @@ app.post('/login', (req, res) => {
     const email = creds.email;
     const password = creds.password;
 
-    const query = "SELECT * FROM users WHERE email = ?";
+    const query = "SELECT * FROM USERS WHERE email = ?";
     db.query(query, [email], (err, results) => {
         if (err) {
             res.status(500).send(`Internal Server Error: ${err}`);
@@ -279,7 +279,7 @@ app.post('/login', (req, res) => {
 
 app.get('/' , (req,res) => {
     if(is_user == true){
-        query = "select * from centres";
+        query = "select * from CENTRES";
         db.query(query,(err,results) => {
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -302,10 +302,10 @@ app.post('/book/:id/:centre/:city/:timings/:date', (req, res) => {
         const id = req.params.id;
         const city = req.params.city;
         const date = req.params.date;
-        const main_query = 'select centre_name from users where id = ?';
+        const main_query = 'select centre_name from USERS where id = ?';
 
-        const query = "UPDATE centres SET slots = slots - 1 WHERE centre_name = ? and city = ?";
-        const query2 = "UPDATE users SET slot_timings = ?, centre_name = ? , booked_city = ? , booked_date = ? WHERE id = ?";
+        const query = "UPDATE CENTRES SET slots = slots - 1 WHERE centre_name = ? and city = ?";
+        const query2 = "UPDATE USERS SET slot_timings = ?, centre_name = ? , booked_city = ? , booked_date = ? WHERE id = ?";
         db.query(main_query,[id],(err,results)=>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -343,7 +343,7 @@ app.post('/book/:id/:centre/:city/:timings/:date', (req, res) => {
 app.get('/search/:city' , (req,res) => {
     if(is_user == true){
         const city = req.params.city;
-        const query = "select * from centres where city = ?";
+        const query = "select * from CENTRES where city = ?";
         db.query(query,[city],(err,results)=>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
@@ -357,7 +357,7 @@ app.get('/search/:city' , (req,res) => {
 app.get('/profile/:id' , (req,res) =>{
     if(is_user == true){
         const id = req.params.id;
-        const query = "select name,email,city,slot_timings,centre_name,booked_city,booked_date from users where id = ?";
+        const query = "select name,email,city,slot_timings,centre_name,booked_city,booked_date from USERS where id = ?";
         db.query(query,[id],(err,results)=>{
             if(err){
                 res.status(500).send(`Internal Server Error: ${err}`);
