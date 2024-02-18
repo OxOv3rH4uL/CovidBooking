@@ -19,7 +19,7 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const url = "http://localhost:3001";
+        const url = "https://vaxbooker.onrender.com";
         console.log(url+'/signup');
         axios.post(url+"/signup", formData)
             .then(res => {
