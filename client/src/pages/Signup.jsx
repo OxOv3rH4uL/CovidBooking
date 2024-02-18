@@ -20,7 +20,7 @@ function Signup() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const url = "https://vaxbooker.onrender.com";
-        axios.post("/signup", formData)
+        axios.post(url+"/signup", formData)
             .then(res => {
                 if (res.data === "Registered Successfully!") {
                     navigate('/login');
