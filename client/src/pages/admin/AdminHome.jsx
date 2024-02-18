@@ -21,7 +21,8 @@ const AdminHomePage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/admin')
+    const url = 'https://vaxbooker.onrender.com'
+    axios.get(url+'/admin')
       .then(res => {
         setCentreDetails(res.data);
         
@@ -39,11 +40,12 @@ const AdminHomePage = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3001/delete_centre/${id}`)
+    const url = 'https://vaxbooker.onrender.com';
+    axios.delete(`${url}/delete_centre/${id}`)
     .then(res => {
       if(res.status === 200 && res.data === "Deleted Successfully!"){
         alert("Deleted Successfully!");
-        axios.get('http://localhost:3001/admin')
+        axios.get(url+'/admin')
         .then(res => {
           setCentreDetails(res.data);
           

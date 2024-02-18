@@ -12,9 +12,10 @@ function Centres() {
     const [slotTimings, setSlotTimings] = useState('');
     const [date, setDate] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const url = 'https://vaxbooker.onrender.com';
 
     useEffect(() => {
-        axios.get('http://localhost:3001')
+        axios.get(url)
             .then(res => {
                 setCentreDetails(res.data);
             })
@@ -34,12 +35,12 @@ function Centres() {
 
     const handleBook = () => {
         const id = localStorage.getItem('id');
-        axios.post(`http://localhost:3001/book/${id}/${selectedCentre.centre_name}/${selectedCentre.city}/${slotTimings}/${date}`)
+        axios.post(`${url}/book/${id}/${selectedCentre.centre_name}/${selectedCentre.city}/${slotTimings}/${date}`)
             .then(res => {
                 if (res.status === 200 && res.data === "Booked Successfully!") {
                     alert("Booked Successfully!");
                     setOpen(false);
-                    axios.get('http://localhost:3001')
+                    axios.get(url)
                         .then(res => {
                             setCentreDetails(res.data);
                         })
@@ -56,7 +57,7 @@ function Centres() {
     };
 
     const handleSearch = () => {
-        axios.get(`http://localhost:3001/search/${searchQuery}`)
+        axios.get(`${url}/search/${searchQuery}`)
             .then(res => {
                 console.log(res);
                 setCentreDetails(res.data);

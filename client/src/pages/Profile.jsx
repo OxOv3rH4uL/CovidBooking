@@ -7,7 +7,8 @@ function ProfilePage() {
 
   useEffect(() => {
     const id = localStorage.getItem('id')
-    axios.get(`http://localhost:3001/profile/${id}`)
+    const url = 'https://vaxbooker.onrender.com';
+    axios.get(`${url}/profile/${id}`)
       .then(response => {
         setUser(response.data[0]); 
       })

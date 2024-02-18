@@ -19,7 +19,8 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3001/login', formData)
+        const url = 'https://vaxbooker.onrender.com';
+        axios.post(url+'/login', formData)
             .then(res => {
                 if (res.status === 200) {
                     

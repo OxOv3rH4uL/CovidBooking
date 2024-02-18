@@ -18,7 +18,8 @@ const AdminCreateCentre = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3001/create_centre', formData)
+    const url="https://vaxbooker.onrender.com"
+    axios.post(url+'/create_centre', formData)
       .then(res => {
         console.log(res);
         if(res.status === 200 && res.data === "Created Successfully!"){

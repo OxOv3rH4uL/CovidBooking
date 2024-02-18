@@ -15,8 +15,9 @@ const AdminLogin = () => {
   };
 
   const handleSubmit = (e) => {
+    const url = 'https://vaxbooker.onrender.com'
     e.preventDefault();
-    axios.post('http://localhost:3001/admin_login', formData)
+    axios.post(url+'/admin_login', formData)
       .then(res => {
         console.log(res);
         if (res.status === 200 && res.data === "WELCOME ADMIN") {

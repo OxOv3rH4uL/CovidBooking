@@ -12,7 +12,8 @@ const AdminUpdateCentre = () => {
 
     useEffect(() => {
         const id = localStorage.getItem('up_id');
-        axios.get(`http://localhost:3001/centre/${id}`)
+        const url = 'https://vaxbooker.onrender.com';
+        axios.get(`${url}/centre/${id}`)
             .then(res => {
                 setFormData(res.data[0]);
             })
@@ -29,7 +30,8 @@ const AdminUpdateCentre = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const id = localStorage.getItem('up_id');
-        axios.put(`http://localhost:3001/update_centre/${id}`, formData)
+        const url = 'https://vaxbooker.onrender.com';
+        axios.put(`${url}/update_centre/${id}`, formData)
             .then(res => {
                 if (res.status === 200 && res.data === "Updated Successfully!") {
                     alert('Updated Successfully!');
